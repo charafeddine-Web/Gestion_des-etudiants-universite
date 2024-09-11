@@ -8,22 +8,19 @@ typedef struct
     char Prenom[20];
     char DateNaissance[11];
     char Departement[30];
-    // int nbrModule;
-    // float Notes[10];
     float Notegeneral;
 } data;
-// int maxetudiant=1000;
-data Etudiants[1000];
+data Etudiants[1000] ;
+// {
+//     {1, "tbibzat", "charaf", "01/01/2000", "Computer Science", 16.5},
+//     {2, "smaki", "rayan", "02/02/1999", "Mathematics", 9.0},
+//     {3, "alaoui", "moncef", "03/03/1998", "Computer Science", 17.0},
+// };
+// int count = sizeof(Etudiants) / sizeof(Etudiants[0]);
+
+// data Etudiants[1000];
 int count = 0;
-// float Calcule_note_ganeral(int nbrModule,float Notes[] ){
-//     float somme =0;
-//     for (int i = 0; i < nbrModule; i++)
-//     {
-//         somme += Notes[i];
-//     }
-//     float moyen= somme/nbrModule;
-//     return moyen;
-// }
+
 int recherch_simpel(int Numero)
 {
     for (int i = 0; i < count; i++)
@@ -56,7 +53,6 @@ void Ajouter_etudiant()
             if (indexsearch != -1)
             {
                 printf("le numero est deja existant\n");
-                // found = 1;
             }
             else
             {
@@ -67,13 +63,13 @@ void Ajouter_etudiant()
         printf("nom : ");
         scanf(" %s", Etudiants[count].Nom);
         printf("prenom : ");
-        scanf(" %s", Etudiants[count].Prenom);
+        scanf(" %[^\n]s", Etudiants[count].Prenom);
         printf("date de naissance ,format (jj/mm/aaaa) : ");
         scanf(" %s", Etudiants[count].DateNaissance);
         printf("departement : ");
-        scanf(" %s", Etudiants[count].Departement);
+        scanf(" %[^\n]s", Etudiants[count].Departement);
         printf("note general : ");
-        scanf("%f", &Etudiants[count].Notegeneral);
+        scanf(" %.2f", &Etudiants[count].Notegeneral);
         count++;
         printf("etudiant ajoute avec succes\n");
     }
@@ -158,17 +154,22 @@ void supprimer_etudiant()
         int confirmation;
         printf("etes vous sur de supprimer cet etudiant ? (1 pour oui ,0 pour non) : ");
         scanf("%d", &confirmation);
-        if(confirmation==1){
-            for(int j=choixsupp;j<count-1;j++){
-                    Etudiants[j]=Etudiants[j+1];
+        if (confirmation == 1)
+        {
+            for (int j = choixsupp; j < count - 1; j++)
+            {
+                Etudiants[j] = Etudiants[j + 1];
             }
             count--;
-        }else{
+        }
+        else
+        {
             printf("suppression annulee\n");
             return;
         }
-       
-    }else{
+    }
+    else
+    {
         printf("l'etudiant n'existe pas\n");
     }
 }
@@ -191,7 +192,7 @@ void Afficher_etudiant()
             printf("le prenom est:%s\n", Etudiants[j].Prenom);
             printf("la date de naissance est:%s\n", Etudiants[j].DateNaissance);
             printf("le departement est:%s\n", Etudiants[j].Departement);
-            printf("la note general est:%f\n\n", Etudiants[j].Notegeneral);
+            printf("la note general est:%.2f\n\n", Etudiants[j].Notegeneral);
         }
         break;
     case 2:
@@ -216,39 +217,152 @@ void Afficher_etudiant()
             printf("le prenom est:%s\n", Etudiants[j].Prenom);
             printf("la date de naissance est:%s\n", Etudiants[j].DateNaissance);
             printf("le departement est:%s\n", Etudiants[j].Departement);
-            printf("la note general est:%f\n\n", Etudiants[j].Notegeneral);
+            printf("la note general est:%.2f\n\n", Etudiants[j].Notegeneral);
         }
         break;
     case 3:
-          for (int i = 0; i < count-1; i++){
-            for(int j=i+1;j<count-i-1;j++){
-                if(Etudiants[j].Notegeneral<Etudiants[j+1].Notegeneral){
-                    data tp=Etudiants[j];
-                    Etudiants[j]=Etudiants[j+1];
-                    Etudiants[j+1]=tp;
+        for (int i = 0; i < count - 1; i++)
+        {
+            for (int j = 0; j < count - i - 1; j++)
+            {
+                if (Etudiants[j].Notegeneral < Etudiants[j + 1].Notegeneral)
+                {
+                    data tp = Etudiants[j];
+                    Etudiants[j] = Etudiants[j + 1];
+                    Etudiants[j + 1] = tp;
                 }
             }
-          }
-          for (int j = 0; j < count; j++){
-            printf("la note general est:%f\n\n", Etudiants[j].Notegeneral);
-            printf("le numero est:%d\n", Etudiants[j].Numero);
-            printf("le nom est:%s\n", Etudiants[j].Nom);
-            printf("le prenom est:%s\n", Etudiants[j].Prenom);
-            printf("la date de naissance est:%s\n", Etudiants[j].DateNaissance);
-            printf("le departement est:%s\n", Etudiants[j].Departement);
-          }
-       break;
+        }
+        for (int j = 0; j < count; j++)
+        {
+            if (Etudiants[j].Notegeneral >= 10)
+            {
+                printf("la note general est:%.2f\n", Etudiants[j].Notegeneral);
+                printf("le numero est:%d\n", Etudiants[j].Numero);
+                printf("le nom est:%s\n", Etudiants[j].Nom);
+                printf("le prenom est:%s\n", Etudiants[j].Prenom);
+                printf("la date de naissance est:%s\n", Etudiants[j].DateNaissance);
+                printf("le departement est:%s\n\n", Etudiants[j].Departement);
+            }
+        }
+        break;
     default:
         printf("choix invalide");
         break;
-
     }
 }
 void Calculer_moyenne_generale()
 {
+
+    double somme_notes_université = 0;
+    int count_nombre_etudiant = 0;
+    char departements[10][20];
+    double somme_dept[10] = {0};
+    int count_dept[10] = {0};
+    int dept_count = 0;
+
+    for (int i = 0; i < count; i++)
+    {
+        int dept_found = 0;
+        for (int j = 0; j < dept_count; j++)
+        {
+            if (strcmp(Etudiants[i].Departement, departements[j]) == 0)
+            {
+                somme_dept[j] += Etudiants[i].Notegeneral;
+                count_dept[j]++;
+                dept_found = 1;
+                break;
+            }
+        }
+
+        if (!dept_found)
+        {
+            strcpy(departements[dept_count], Etudiants[i].Departement);
+            somme_dept[dept_count] = Etudiants[i].Notegeneral;
+            count_dept[dept_count] = 1;
+            dept_count++;
+        }
+        somme_notes_université += Etudiants[i].Notegeneral;
+        count_nombre_etudiant++;
+    }
+
+    printf("\nMoyenne générale de chaque département :\n");
+    for (int i = 0; i < dept_count; i++)
+    {
+        printf("Département %s : %.2f\n", departements[i], somme_dept[i] / count_dept[i]);
+    }
+
+    if (count_nombre_etudiant > 0)
+    {
+        printf("Moyenne générale de l'université : %.2f\n", somme_notes_université / count_nombre_etudiant);
+    }
+    else
+    {
+        printf("Aucun étudiant pour calculer la moyenne.\n");
+    }
 }
 void Statistiques()
 {
+    int choixstatiq;
+
+    printf("1- Afficher le nombre total des etudiants inscrits\n");
+    printf("2- Afficher le nombre des etudiants dans chaque departement\n");
+    printf("3- Afficher les etudiants ayant une moyenne generale superieure a un certain seuil\n");
+    printf("4- Afficher les 3 etudiants ayant la meilleure notes \n");
+    printf("5- Afficher le nombre des etudiants ayant reussi dans chaque departement Note>=10 \n");
+    printf("6- retour au menu principal\n");
+    printf("choisir le type de statistique : ");
+    scanf("%d", &choixstatiq);
+    switch (choixstatiq)
+    {
+    case 1:
+        if (count == 0)
+        {
+            printf("Aucun etudiant dans la liste.\n");
+            return;
+        }
+        else
+        {
+            printf("le nombre total des etudiants inscrits est:%d\n", count);
+        }
+        break;
+    case 2:
+        // printf("le nombre des etudiants dans chaque departement\n");
+        // char dep[50];
+        // for(int i=0;i<count-1;i++){
+        //     for(int j=i+1;j<count;j++){
+        //         if(Etudiants[i].Departement==Etudiants[j].Departement){
+        //             count++;
+        //         }
+        //     }
+        // }
+        // float totalScore = 0;
+        // // Calculate the total score
+        // for (int i = 0; i < count; i++)
+        // {
+        //     totalScore += Etudiants[i].Notegeneral;
+        // }
+        // // Calculate the average score
+        // float moyenne = totalScore / count;
+        // printf("La moyenne generale des etudiants est: %.2f\n", moyenne);
+        break;
+        break;
+    case 3:
+        printf("les etudiants ayant une moyenne generale superieure a un certain seuil\n");
+        break;
+    case 4:
+        printf("les 3 etudiants ayant la meilleure notes\n");
+        break;
+    case 5:
+        printf("le nombre des etudiants ayant reussi dans chaque departement Note>=10\n");
+        break;
+    case 6:
+        return;
+        break;
+    default:
+        printf("choix invalide\n");
+        break;
+    }
 }
 void Rechercher_etudiant()
 {
@@ -301,7 +415,11 @@ void Rechercher_etudiant()
 }
 
 int main()
-{
+{   
+    // Etudiants[0]=(data){1, "tbibzat", "charaf", "01/01/2000", "Computer Science", 16.5};
+    // Etudiants[1]=(data){2, "smaki", "rayan", "02/02/1999", "Mathematics", 9.0};
+    // Etudiants[2]=(data){3, "alaoui", "moncef", "03/03/1998", "Computer Science", 17.0};
+    
     int choix = 0;
     while (choix <= 8)
     {
