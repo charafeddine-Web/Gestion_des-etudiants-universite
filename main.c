@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
 
 typedef struct
 {
@@ -7,19 +8,12 @@ typedef struct
     char Nom[20];
     char Prenom[20];
     char DateNaissance[11];
-    char Departement[30];
+    char Departement[50];
     float Notegeneral;
 } data;
-data Etudiants[1000] ;
-// {
-//     {1, "tbibzat", "charaf", "01/01/2000", "Computer Science", 16.5},
-//     {2, "smaki", "rayan", "02/02/1999", "Mathematics", 9.0},
-//     {3, "alaoui", "moncef", "03/03/1998", "Computer Science", 17.0},
-// };
-// int count = sizeof(Etudiants) / sizeof(Etudiants[0]);
 
-// data Etudiants[1000];
-int count = 0;
+data Etudiants[1000];
+int count = 5;
 
 int recherch_simpel(int Numero)
 {
@@ -34,12 +28,11 @@ int recherch_simpel(int Numero)
 }
 void Ajouter_etudiant()
 {
-    int choixajoute = 0;
+    int choixajoute;
     int Nnumber;
     printf(">>>-----------entre la methode d'ajout--------------<<<\n");
     printf("1-ajouter etudiant\n2-ajouter multiple etudiants\n3-retour au menu principal\n ");
     scanf("%d", &choixajoute);
-
     if (choixajoute == 1)
     {
         printf("----------------------------ajouter etudiant----------------------------\n");
@@ -69,7 +62,7 @@ void Ajouter_etudiant()
         printf("departement : ");
         scanf(" %[^\n]s", Etudiants[count].Departement);
         printf("note general : ");
-        scanf(" %.2f", &Etudiants[count].Notegeneral);
+        scanf("%.2f", &Etudiants[count].Notegeneral);
         count++;
         printf("etudiant ajoute avec succes\n");
     }
@@ -173,137 +166,226 @@ void supprimer_etudiant()
         printf("l'etudiant n'existe pas\n");
     }
 }
-void Afficher_etudiant()
-{
+void Afficher_etudiant() {
     int choixafficher;
     printf("----------------------------Afficher les etudiants----------------------------\n\n");
-    printf("choisir une option pour afficher les etudiants\n");
-    printf("1 : afficher tous les etudiants\n");
-    printf("2 : afficher les etudiants par alphabetique \n");
-    printf("3 : afficher les etudiants par  moyenne generale\n");
+    printf("Choisir une option pour afficher les etudiants\n");
+    printf("1 : Afficher tous les etudiants\n");
+    printf("2 : Afficher les etudiants par ordre alphabetique\n");
+    printf("3 : Afficher les etudiants par moyenne generale\n");
+    printf("4 : Afficher les etudiants ayant une moyenne >= 10/20\n");
+
     scanf("%d", &choixafficher);
-    switch (choixafficher)
-    {
+    switch (choixafficher) {
     case 1:
-        for (int j = 0; j < count; j++)
-        {
-            printf("le numero est:%d\n", Etudiants[j].Numero);
-            printf("le nom est:%s\n", Etudiants[j].Nom);
-            printf("le prenom est:%s\n", Etudiants[j].Prenom);
-            printf("la date de naissance est:%s\n", Etudiants[j].DateNaissance);
-            printf("le departement est:%s\n", Etudiants[j].Departement);
-            printf("la note general est:%.2f\n\n", Etudiants[j].Notegeneral);
+        // Affichage de tous les etudiants
+        for (int j = 0; j < count; j++) {
+            printf("Numero : %d\n", Etudiants[j].Numero);
+            printf("Nom : %s\n", Etudiants[j].Nom);
+            printf("Prenom : %s\n", Etudiants[j].Prenom);
+            printf("Date de naissance : %s\n", Etudiants[j].DateNaissance);
+            printf("Departement : %s\n", Etudiants[j].Departement);
+            printf("Note generale : %.2f\n\n", Etudiants[j].Notegeneral);
         }
         break;
+
     case 2:
-        for (int i = 0; i < count - 1; i++)
-        {
-            int minindex = i;
-            for (int j = i + 1; j < count; j++)
-            {
-                if (strcmp(Etudiants[minindex].Nom, Etudiants[j].Nom) > 0)
-                {
-                    minindex = j;
+        // Affichage des etudiants par ordre alphabetique
+        printf("----------------------------Afficher les etudiants par ordre alphabetique----------------------------\n\n");
+        int choixalpha;
+        printf("1 - Ordre croissant (A a Z)\n");
+        printf("2 - Ordre decroissant (Z a A)\n");
+        printf("Entrer la methode : ");
+        scanf("%d", &choixalpha);
+        
+        // Tri par ordre alphabetique
+        if (choixalpha == 1) {
+            // Tri croissant
+            for (int i = 0; i < count - 1; i++) {
+                for (int j = i + 1; j < count; j++) {
+                    if (strcmp(Etudiants[i].Nom, Etudiants[j].Nom) > 0) {
+                        data temp = Etudiants[i];
+                        Etudiants[i] = Etudiants[j];
+                        Etudiants[j] = temp;
+                    }
                 }
             }
-            data temp = Etudiants[i];
-            Etudiants[i] = Etudiants[minindex];
-            Etudiants[minindex] = temp;
+        } else if (choixalpha == 2) {
+            // Tri decroissant
+            for (int i = 0; i < count - 1; i++) {
+                for (int j = i + 1; j < count; j++) {
+                    if (strcmp(Etudiants[i].Nom, Etudiants[j].Nom) < 0) {
+                        data temp = Etudiants[i];
+                        Etudiants[i] = Etudiants[j];
+                        Etudiants[j] = temp;
+                    }
+                }
+            }
+        } else {
+            printf("Choix invalide\n");
+            break;
         }
-        for (int j = 0; j < count; j++)
-        {
-            printf("le nom est:%s\n", Etudiants[j].Nom);
-            printf("le numero est:%d\n", Etudiants[j].Numero);
-            printf("le prenom est:%s\n", Etudiants[j].Prenom);
-            printf("la date de naissance est:%s\n", Etudiants[j].DateNaissance);
-            printf("le departement est:%s\n", Etudiants[j].Departement);
-            printf("la note general est:%.2f\n\n", Etudiants[j].Notegeneral);
+
+        // Affichage apres tri
+        for (int j = 0; j < count; j++) {
+            printf("Nom : %s\n", Etudiants[j].Nom);
+            printf("Numero : %d\n", Etudiants[j].Numero);
+            printf("Prenom : %s\n", Etudiants[j].Prenom);
+            printf("Date de naissance : %s\n", Etudiants[j].DateNaissance);
+            printf("Departement : %s\n", Etudiants[j].Departement);
+            printf("Note generale : %.2f\n\n", Etudiants[j].Notegeneral);
         }
         break;
+
     case 3:
-        for (int i = 0; i < count - 1; i++)
-        {
-            for (int j = 0; j < count - i - 1; j++)
-            {
-                if (Etudiants[j].Notegeneral < Etudiants[j + 1].Notegeneral)
-                {
-                    data tp = Etudiants[j];
-                    Etudiants[j] = Etudiants[j + 1];
-                    Etudiants[j + 1] = tp;
+        // Affichage des etudiants par moyenne generale
+        printf("----------------------------Afficher les etudiants par moyenne generale----------------------------\n\n");
+        int choixmoyen;
+        printf("1 - De la note la plus elevee a la plus basse\n");
+        printf("2 - De la note la plus basse a la plus elevee\n");
+        printf("Entrer la methode : ");
+        scanf("%d", &choixmoyen);
+
+        // Tri par moyenne generale
+        if (choixmoyen == 1) {
+            // Tri decroissant
+            for (int i = 0; i < count - 1; i++) {
+                for (int j = 0; j < count - i - 1; j++) {
+                    if (Etudiants[j].Notegeneral < Etudiants[j + 1].Notegeneral) {
+                        data temp = Etudiants[j];
+                        Etudiants[j] = Etudiants[j + 1];
+                        Etudiants[j + 1] = temp;
+                    }
                 }
             }
+        } else if (choixmoyen == 2) {
+            // Tri croissant
+            for (int i = 0; i < count - 1; i++) {
+                for (int j = 0; j < count - i - 1; j++) {
+                    if (Etudiants[j].Notegeneral > Etudiants[j + 1].Notegeneral) {
+                        data temp = Etudiants[j];
+                        Etudiants[j] = Etudiants[j + 1];
+                        Etudiants[j + 1] = temp;
+                    }
+                }
+            }
+        } else {
+            printf("Choix invalide\n");
+            break;
         }
-        for (int j = 0; j < count; j++)
-        {
-            if (Etudiants[j].Notegeneral >= 10)
-            {
-                printf("la note general est:%.2f\n", Etudiants[j].Notegeneral);
-                printf("le numero est:%d\n", Etudiants[j].Numero);
-                printf("le nom est:%s\n", Etudiants[j].Nom);
-                printf("le prenom est:%s\n", Etudiants[j].Prenom);
-                printf("la date de naissance est:%s\n", Etudiants[j].DateNaissance);
-                printf("le departement est:%s\n\n", Etudiants[j].Departement);
+
+        // Affichage apres tri
+        for (int j = 0; j < count; j++) {
+            printf("Note generale : %.2f\n", Etudiants[j].Notegeneral);
+            printf("Numero : %d\n", Etudiants[j].Numero);
+            printf("Nom : %s\n", Etudiants[j].Nom);
+            printf("Prenom : %s\n", Etudiants[j].Prenom);
+            printf("Date de naissance : %s\n", Etudiants[j].DateNaissance);
+            printf("Departement : %s\n\n", Etudiants[j].Departement);
+        }
+        break;
+
+    case 4:
+        // Affichage des etudiants ayant une moyenne >= 10
+        printf("----------------------------Afficher les etudiants ayant une moyenne >= 10----------------------------\n\n");
+        for (int j = 0; j < count; j++) {
+            if (Etudiants[j].Notegeneral >= 10) {
+                printf("Note generale : %.2f\n", Etudiants[j].Notegeneral);
+                printf("Numero : %d\n", Etudiants[j].Numero);
+                printf("Nom : %s\n", Etudiants[j].Nom);
+                printf("Prenom : %s\n", Etudiants[j].Prenom);
+                printf("Date de naissance : %s\n", Etudiants[j].DateNaissance);
+                printf("Departement : %s\n\n", Etudiants[j].Departement);
             }
         }
         break;
+
     default:
-        printf("choix invalide");
+        printf("Choix invalide\n");
         break;
     }
 }
 void Calculer_moyenne_generale()
 {
-
-    double somme_notes_université = 0;
+    double somme_notes_universit = 0;
     int count_nombre_etudiant = 0;
-    char departements[10][20];
-    double somme_dept[10] = {0};
-    int count_dept[10] = {0};
-    int dept_count = 0;
+    char departements[10][20];   // Tableau pour stocker les noms des departements
+    double somme_dept[10] = {0}; // somme des notes pour chaque département
+    int count_dept[10] = {0};    // le nombre d'étudiants dans chaque département
+    int dept_count = 0;          // Compteur pour le nombre de départements uniques
 
+    // Boucle pour parcourir tous les étudiants
     for (int i = 0; i < count; i++)
     {
         int dept_found = 0;
+        // Boucle pour rechercher dans les départements connus
         for (int j = 0; j < dept_count; j++)
         {
+            // Vérifier si le département de l'étudiant correspond à un département déjà enregistré
             if (strcmp(Etudiants[i].Departement, departements[j]) == 0)
             {
                 somme_dept[j] += Etudiants[i].Notegeneral;
-                count_dept[j]++;
-                dept_found = 1;
-                break;
+                count_dept[j]++; // Augmenter le nombre d'étudiants dans ce département
+                dept_found = 1;  // Marquer le département comme trouvé
+                break;           // Quitter la boucle interne
             }
         }
 
+        // Si le département n'a pas été trouvé dans les départements connus
         if (!dept_found)
         {
             strcpy(departements[dept_count], Etudiants[i].Departement);
+            // Initialiser la somme des notes pour ce nouveau département
             somme_dept[dept_count] = Etudiants[i].Notegeneral;
+            // Initialiser le nombre d'étudiants pour ce nouveau département
             count_dept[dept_count] = 1;
+            // Augmenter le compteur des départements
             dept_count++;
         }
-        somme_notes_université += Etudiants[i].Notegeneral;
+        somme_notes_universit += Etudiants[i].Notegeneral;
         count_nombre_etudiant++;
     }
 
-    printf("\nMoyenne générale de chaque département :\n");
+    // Afficher la moyenne des notes pour chaque département
+    printf("\nMoyenne generale de chaque departement :\n");
     for (int i = 0; i < dept_count; i++)
     {
-        printf("Département %s : %.2f\n", departements[i], somme_dept[i] / count_dept[i]);
+        printf("Departement %s : %.2f\n", departements[i], somme_dept[i] / count_dept[i]);
     }
 
     if (count_nombre_etudiant > 0)
     {
-        printf("Moyenne générale de l'université : %.2f\n", somme_notes_université / count_nombre_etudiant);
+        // Afficher la moyenne generale des notes pour tous les etudiants
+        printf("Moyenne generale de l'universite : %.2f\n", somme_notes_universit / count_nombre_etudiant);
     }
     else
     {
-        printf("Aucun étudiant pour calculer la moyenne.\n");
+        printf("Aucun etudiant pour calculer la moyenne.\n");
+    }
+}
+void tri_par_notes(data etudiants[], int n)
+{
+    data temp;
+    for (int i = 0; i < n - 1; i++)
+    {
+        for (int j = i + 1; j < n; j++)
+        {
+            if (etudiants[i].Notegeneral < etudiants[j].Notegeneral)
+            {
+                temp = etudiants[i];
+                etudiants[i] = etudiants[j];
+                etudiants[j] = temp;
+            }
+        }
     }
 }
 void Statistiques()
 {
     int choixstatiq;
+    float seuil = 0;
+    char departements[50][50];
+    int nombre_reussite[50] = {0};
+    int dept_count = 0;
 
     printf("1- Afficher le nombre total des etudiants inscrits\n");
     printf("2- Afficher le nombre des etudiants dans chaque departement\n");
@@ -327,34 +409,100 @@ void Statistiques()
         }
         break;
     case 2:
-        // printf("le nombre des etudiants dans chaque departement\n");
-        // char dep[50];
-        // for(int i=0;i<count-1;i++){
-        //     for(int j=i+1;j<count;j++){
-        //         if(Etudiants[i].Departement==Etudiants[j].Departement){
-        //             count++;
-        //         }
-        //     }
-        // }
-        // float totalScore = 0;
-        // // Calculate the total score
-        // for (int i = 0; i < count; i++)
-        // {
-        //     totalScore += Etudiants[i].Notegeneral;
-        // }
-        // // Calculate the average score
-        // float moyenne = totalScore / count;
-        // printf("La moyenne generale des etudiants est: %.2f\n", moyenne);
-        break;
+        printf("Le nombre des etudiants dans chaque departement:\n");
+
+        // char departements[50][50];
+        int nombre_etudiants[50] = {0};
+        // int dept_count = 0;
+        for (int i = 0; i < count; i++)
+        {
+            int found = 0;
+            for (int j = 0; j < dept_count; j++)
+            {
+                if (strcmp(Etudiants[i].Departement, departements[j]) == 0)
+                {
+                    nombre_etudiants[j]++;
+                    found = 1;
+                    break;
+                }
+            }
+            if (!found)
+            {
+                strcpy(departements[dept_count], Etudiants[i].Departement);
+                nombre_etudiants[dept_count] = 1;
+                dept_count++;
+            }
+        }
+        for (int i = 0; i < dept_count; i++)
+        {
+            printf("Departement %s : %d etudiants\n", departements[i], nombre_etudiants[i]);
+        }
         break;
     case 3:
-        printf("les etudiants ayant une moyenne generale superieure a un certain seuil\n");
+        // float seuil;
+        printf("Entrer le seuil de moyenne : ");
+        scanf("%f", &seuil);
+        printf("Les etudiants ayant une moyenne generale superieure a %.2f:\n", seuil);
+        for (int i = 0; i < count; i++)
+        {
+            if (Etudiants[i].Notegeneral > seuil)
+            {
+                printf("Numero: %d, Nom: %s, Prenom: %s, Note: %.2f\n",
+                       Etudiants[i].Numero, Etudiants[i].Nom, Etudiants[i].Prenom, Etudiants[i].Notegeneral);
+            }
+        }
         break;
     case 4:
-        printf("les 3 etudiants ayant la meilleure notes\n");
+        if (count < 3)
+        {
+            printf("Il n'y a pas assez d'étudiants pour afficher les 3 meilleures notes.\n");
+            return;
+        }
+        data etudiants_triees[100];
+        memcpy(etudiants_triees, Etudiants, sizeof(Etudiants));
+
+        tri_par_notes(etudiants_triees, count);
+
+        printf("Les 3 étudiants ayant les meilleures notes:\n");
+        for (int i = 0; i < 3; i++)
+        {
+            printf("Numéro: %d, Nom: %s, Prénom: %s, Note: %.2f\n",
+                   etudiants_triees[i].Numero, etudiants_triees[i].Nom, etudiants_triees[i].Prenom, etudiants_triees[i].Notegeneral);
+        }
         break;
     case 5:
-        printf("le nombre des etudiants ayant reussi dans chaque departement Note>=10\n");
+        // char departements[50][50];
+        // int nombre_reussite[50] = {0};
+        // int dept_count = 0;
+
+        for (int i = 0; i < count; i++)
+        {
+            if (Etudiants[i].Notegeneral >= 10)
+            {
+                int found = 0;
+                for (int j = 0; j < dept_count; j++)
+                {
+                    if (strcmp(Etudiants[i].Departement, departements[j]) == 0)
+                    {
+                        nombre_reussite[j]++;
+                        found = 1;
+                        break;
+                    }
+                }
+                if (!found)
+                {
+                    strcpy(departements[dept_count], Etudiants[i].Departement);
+                    nombre_reussite[dept_count] = 1;
+                    dept_count++;
+                }
+            }
+        }
+
+        printf("Le nombre des etudiants ayant reussi (Note >= 10) dans chaque departement:\n");
+        for (int i = 0; i < dept_count; i++)
+        {
+            printf("Departement %s : %d etudiants\n", departements[i], nombre_reussite[i]);
+        }
         break;
     case 6:
         return;
@@ -369,9 +517,9 @@ void Rechercher_etudiant()
     char Snom[50];
     int choixsearch;
     printf("----------------------------Rechercher les etudiants----------------------------\n\n");
-    printf("choisir une option pour rechercher les etudiants\n");
     printf("1 : rechercher les etudiants par nom\n");
     printf("2 : rechercher les etudiants par departement\n");
+    printf("choisir une option pour rechercher les etudiants\n");
     scanf("%d", &choixsearch);
     if (choixsearch == 1)
     {
@@ -415,13 +563,15 @@ void Rechercher_etudiant()
 }
 
 int main()
-{   
-    // Etudiants[0]=(data){1, "tbibzat", "charaf", "01/01/2000", "Computer Science", 16.5};
-    // Etudiants[1]=(data){2, "smaki", "rayan", "02/02/1999", "Mathematics", 9.0};
-    // Etudiants[2]=(data){3, "alaoui", "moncef", "03/03/1998", "Computer Science", 17.0};
-    
+{
+    Etudiants[0] = (data){1, "tbibzat", "charaf", "01/01/2000", "Computer Science", 16.5};
+    Etudiants[1] = (data){2, "smaki", "rayan", "02/02/1999", "Mathematics", 9.0};
+    Etudiants[2] = (data){3, "alaoui", "moncef", "03/03/1998", "Phisique", 17.0};
+    Etudiants[3] = (data){4, "benkrara", "ahmed", "03/03/2000", "Computer Science", 19.50};
+    Etudiants[4] = (data){5, "kharbach", "ayoub", "03/03/2002", "Computer Science", 10.00};
+
     int choix = 0;
-    while (choix <= 8)
+    while (choix != 8)
     {
         printf(">>>>>>-----------------------------------------------------------------------<<<<<<<<<<\n");
         printf("\t\t system Gestion des Etudiants dans une universite \n");
@@ -437,6 +587,8 @@ int main()
         printf("8-Quitter\n\n");
         printf("Donner votre choix : \n");
         scanf("%d", &choix);
+        while (getchar() != '\n')
+            ; // Nettoyer le buffer
         switch (choix)
         {
         case 1:
@@ -464,12 +616,14 @@ int main()
             Rechercher_etudiant();
             break;
         case 8:
+            printf("Quitter le programme.\n");
             return 0;
-            break;
         default:
             printf(" Choix invalide \n\n");
             break;
         }
+        system("pause");
+        system("cls");
     }
     return 0;
 }
